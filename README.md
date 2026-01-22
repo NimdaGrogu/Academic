@@ -1,4 +1,4 @@
-# 🎓 Master's / PhD Academic Portfolio
+# 🎓 Post Graduate Academic Portfolio
 
 **Degree:** Postgraduate Program in Artificial Intelligence / Data Science / Machine Learning
 **Institution:** [UTA  / MIT]
