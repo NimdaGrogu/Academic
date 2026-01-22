@@ -1,21 +1,40 @@
-## Machine Learning  
+# 🎓 Master's / PhD Academic Portfolio
 
-Machine learning is a type of artificial intelligence that allows computer systems to automatically learn and improve from experience without being explicitly programmed.
+**Degree:** Postgraduate Program in Artificial Intelligence / Data Science / Machine Learning
+**Institution:** [UTA  / MIT]
+**Status:** [In Progress / Completed 2026]
 
-In machine learning, algorithms analyze data, identify patterns, and make predictions or decisions based on that data. The algorithms learn from the data they are trained on and use that knowledge to make accurate predictions or decisions on new, unseen data.
+## 📖 Overview
+This repository serves as a centralized archive of my post-graduate coursework, research experiments, and technical implementations. It documents my progression from foundational statistical modeling to advanced deep learning architectures.
 
-There are three main types of machine learning: supervised learning, unsupervised learning, and reinforcement learning.
+## 📂 Repository Structure
 
-Supervised learning involves training a model on a labeled dataset, where the desired output is known. The model learns to map input data to the correct output based on the labeled examples.
+The codebase is organized by module and research focus:
 
-Unsupervised learning involves training a model on an unlabeled dataset, where the desired output is unknown. The model learns to identify patterns and relationships within the data without any explicit guidance.
+### 🧠 Machine Learning & Deep Learning
+* **`/Neural_Networks`**: Implementation of custom MLP backpropagation from scratch (NumPy only) and Transfer Learning experiments using PyTorch/ResNet.
+* **`/Computer_Vision`**: Object detection projects using YOLO and semantic segmentation on the [Dataset Name] dataset.
+* **`/NLP`**: Transformer-based models for sentiment analysis and Large Language Model (LLM) fine-tuning experiments.
 
-Reinforcement learning involves training a model to make decisions based on feedback from its environment. The model receives rewards or punishments for its actions and learns to maximize its rewards over time.
+### 📊 Data Science & Statistics
+* **`/Statistical_Methods`**: Bayesian inference models and hypothesis testing (R/Python).
+* **`/Data_Pipelines`**: End-to-end ETL pipelines cleaning raw data for model ingestion.
+* **`/Visualization`**: Advanced plotting using Matplotlib/Seaborn to interpret model bias and feature importance.
 
-Machine learning has many applications in a variety of fields, including image recognition, natural language processing, speech recognition, and predictive modeling.
+### 🔬 Thesis / Capstone Project
+> **Project Title:** *[Insert Your Thesis Title]*
+* **Abstract:** Brief 2-sentence summary of your main research contribution.
+* **Code:** [Link to specific folder]
+* **Draft/Paper:** [Link to PDF if public]
 
-## Description:
+## 🛠️ Tech Stack & Tools
+![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F00?logo=tensorflow&logoColor=white)
+![PyTorch](https://img.shields.io/badge/-PyTorch-EE4C2C?logo=pytorch&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/-ScikitLearn-F7931E?logo=scikit-learn&logoColor=white)
+![Jupyter](https://img.shields.io/badge/-Jupyter-F37626?logo=jupyter&logoColor=white)
 
-Welcome to the AI-ML-DS-Freshman-Starter-Kit! This repository is designed to help beginners in the fields of Machine Learning (ML), Data Science (DS), and Artificial Intelligence (AI) kickstart their learning journey. I have compiled a curated list of resources, tutorials, and projects to guide you through the basics and provide hands-on experience in these exciting fields.
-Hands-On Projects: 
-Develop your skills and understanding by working on beginner-friendly projects, covering topics such as data visualization, regression analysis, classification, natural language processing, and more.
+## ⚖️ License & Integrity
+All code in this repository is my original work developed for academic assessment, unless cited otherwise.
+* **License:** MIT License (Open for use with attribution)
+* **Academic Integrity:** Please do not copy solutions directly if you are currently taking these courses.
