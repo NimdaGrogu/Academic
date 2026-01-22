@@ -1,15 +1,14 @@
-/venv/
-/Generative AI Foundations /Capstone Projects/Project 2 Medical Assistant/vector_db/
-job_hunt_buddy/notebooks/vectorDB/
-/Users/jonathan/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/Machine_Learning_Projects/job_hunt_buddy/Config.json
+vector_db/
+vectorDB/
 Config.json
 # Python
 __pycache__/
 *.py[cod]
 
 # Environments
-.env
+env/
 venv/
+.venv/
 
 # AI/ML Specific (Do NOT commit these!)
 *.pt       # PyTorch weights
@@ -18,3 +17,10 @@ venv/
 *.ckpt
 data/      # Your raw dataset folder
 wandb/     # Weights & Biases logs
+
+# --- IDE Settings ---
+.idea/
+
+# --- OS Junk ---
+.DS_Store
+Thumbs.db
