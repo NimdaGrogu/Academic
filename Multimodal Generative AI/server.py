@@ -386,5 +386,11 @@ def get_supplier_contacts() -> str:
     return contacts
 
 if __name__ == "__main__":
-    print("Server Started..")
+    import logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s | %(levelname)s | %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'  #
+    )
+    logging.info("Server Started.. ")
     mcp.run()
