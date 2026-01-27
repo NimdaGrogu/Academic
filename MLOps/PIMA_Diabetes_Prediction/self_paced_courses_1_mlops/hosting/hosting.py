@@ -1,5 +1,8 @@
 from huggingface_hub import HfApi
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="../.env")
 import os
+
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
