@@ -40,20 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Debug workspace (show files & paths)
-        run: |
-          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-          echo "BASE_PATH: $BASE_PATH"
-          pwd
-          ls -la
-          echo "Listing BASE_PATH:"
-          ls -la "$BASE_PATH" || true
-          echo "Listing BASE_PATH/model_building:"
-          ls -la "$BASE_PATH/model_building" || true
-          echo "Listing repo-root data:"
-          ls -la /model_building || true
       - name: 2. Run Data Preparation
         env:
-          working-directory: ${{ env.BASE_PATH }}
+          BASE_PATH: MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops
         run: python ${{ env.BASE_PATH }}/model_building/prep.py
 
