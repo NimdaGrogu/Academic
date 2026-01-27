@@ -1,30 +1,42 @@
 from huggingface_hub.utils import RepositoryNotFoundError
 from huggingface_hub import HfApi, create_repo
-import os
 from dotenv import load_dotenv
+import os
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+)
+logger = logging.getLogger("data_register")
+
+# load local .env for local testing
 load_dotenv(dotenv_path="../.env")
 
-HF_USERNAME = os.getenv("HF_USERNAME")
-HF_TOKEN = os.getenv("HF_TOKEN")
 
-
-repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"                         # enter the Hugging Face username here
-repo_type = "dataset"
-
-# Initialize API client
-api = HfApi(token=HF_TOKEN)
-
-# Step 1: Check if the space exists
 try:
+    HF_TOKEN = os.getenv("HF_TOKEN")
+    logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
+
+    HF_NAME = os.getenv("HF_USERNAME")
+    logger.info("HF_USERNAME present: %s", "yes" if HF_NAME else "no")
+    # Step 1: Check if the space exists
+    repo_id = f"{HF_NAME}/PIMA-Diabetes-Prediction"  # enter the Hugging Face username here
+    repo_type = "dataset"
+    # Initialize API client
+    api = HfApi(token=HF_TOKEN)
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
-    print(f"Space '{repo_id}' already exists. Using it.")
+    logger.info(f"Space '{repo_id}' already exists. Using it.")
+    # Step 2: Upload the data folder
+    logger.info(f"Uploading the data.")
+    api.upload_folder(
+        folder_path="../data",
+        repo_id=repo_id,
+        repo_type=repo_type,
+        commit_message="Uploading Data.."
+    )
 except RepositoryNotFoundError:
     print(f"Space '{repo_id}' not found. Creating new space...")
     create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
     print(f"Space '{repo_id}' created.")
 
-api.upload_folder(
-    folder_path="self_paced_courses_1_mlops/data",
-    repo_id=repo_id,
-    repo_type=repo_type,
-)
+
