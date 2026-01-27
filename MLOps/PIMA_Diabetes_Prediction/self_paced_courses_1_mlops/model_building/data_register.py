@@ -7,7 +7,7 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 
 
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"                         # enter the Hugging Face username here
-print(HF_USERNAME,HF_TOKEN)
+
 repo_type = "dataset"
 
 # Initialize API client
@@ -15,6 +15,7 @@ api = HfApi(token=HF_TOKEN)
 
 # Step 1: Check if the space exists
 try:
+    print(HF_USERNAME, HF_TOKEN)
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
     print(f"Space '{repo_id}' already exists. Using it.")
 except RepositoryNotFoundError:
