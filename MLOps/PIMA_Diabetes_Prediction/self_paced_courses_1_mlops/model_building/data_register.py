@@ -29,10 +29,9 @@ try:
     # Step 2: Upload the data folder
     logger.info(f"Uploading the data.")
     api.upload_folder(
-        folder_path="../data",
+        folder_path="data",
         repo_id=repo_id,
-        repo_type=repo_type,
-        commit_message="Uploading Data.."
+        repo_type=repo_type
     )
 except RepositoryNotFoundError:
     print(f"Space '{repo_id}' not found. Creating new space...")
