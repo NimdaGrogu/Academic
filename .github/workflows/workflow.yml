@@ -41,8 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 2. Run Data Preparation
-        working-directory: ${{ env.BASE_PATH }}
-        run: python model_building/prep.py
+        run: python ${{ env.BASE_PATH }}/model_building/prep.py
 
   model-training:
     needs: data-prep
