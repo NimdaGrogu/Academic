@@ -29,7 +29,7 @@ try:
     # Step 2: Upload the data folder
     logger.info(f"Uploading the data.")
     api.upload_folder(
-        folder_path="PIMA_Diabetes_Prediction/self_paced_courses_1_mlops/data",
+        folder_path="../data",
         repo_id=repo_id,
         repo_type=repo_type,
     )
