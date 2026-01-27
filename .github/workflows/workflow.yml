@@ -24,12 +24,4 @@ jobs:
         - name: 1. Register Dataset
           run: python ${{ env.BASE_PATH }}/model_building/data_register.py
 
-        - name: 2. Data Preparation
-          run: python ${{ env.BASE_PATH }}/model_building/prep.py
-
-        - name: 3. Model Training
-          run: python ${{ env.BASE_PATH }}/model_building/train.py
-
-        - name: 4. Deploy to Hosting
-          run: python ${{ env.BASE_PATH }}/hosting/hosting.py
 
