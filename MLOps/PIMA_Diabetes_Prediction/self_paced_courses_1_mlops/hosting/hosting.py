@@ -15,13 +15,14 @@ HF_USERNAME = os.getenv("HF_USERNAME")
 logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
 
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"
+repo_type = "space"
+
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 logger.info("Deploying System ..")
 api = HfApi(token=HF_TOKEN)
 
 try:
-    repo_type = "space"
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
     logger.info(f"Space '{repo_id}' Exist::Deploying")
     repo_type="space"
