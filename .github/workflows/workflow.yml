@@ -34,7 +34,7 @@ jobs:
             echo "Listing BASE_PATH/data:"
             ls -la "$BASE_PATH/data" || true
             echo "Listing repo-root data:"
-            ls -la data || true 
+            ls -la /data || true 
 
         #- name: 1. Register Dataset
         #  run: python ${{ env.BASE_PATH }}/model_building/data_register.py
