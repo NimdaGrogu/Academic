@@ -1,4 +1,4 @@
-name: workflow.yml
+name: MLOps github pipeline
 on:
   workflow_dispatch:
 jobs:
