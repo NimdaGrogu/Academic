@@ -69,11 +69,12 @@ jobs:
       BASE_PATH: MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops
       HF_USERNAME: ${{secrets.HF_USERNAME}}
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      # Also expose the token under the name huggingface_hub commonly reads
+      HUGGINGFACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
     needs: [ model-training,data-prep,register-dataset ]
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: pip install -r ${{env.BASE_PATH}}/requirements.txt
       - name: 4. Push files to Frontend Hugging Face Space for Deployment
-        working-directory: ${{env.BASE_PATH}}
         run: python ${{env.BASE_PATH}}/hosting/hosting.py
