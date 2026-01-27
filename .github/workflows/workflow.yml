@@ -49,3 +49,17 @@ jobs:
       - name: 2. Run Data Preparation
         run: python ${{ env.BASE_PATH }}/model_building/prep.py
 
+  model-training:
+    needs: data-prep
+    runs-on: ubuntu-latest
+    env:
+      BASE_PATH: MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops
+      HF_USERNAME: ${{secrets.HF_USERNAME}}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r ${{env.BASE_PATH}}/requirements.txt
+      - name: 3. Model Building
+        run: python ${{ env.BASE_PATH }}/model_building/train.py
+
