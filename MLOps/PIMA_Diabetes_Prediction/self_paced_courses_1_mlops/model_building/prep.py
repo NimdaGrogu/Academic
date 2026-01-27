@@ -6,10 +6,14 @@ from sklearn.model_selection import train_test_split
 # for converting text data in to numerical representation
 # for hugging face space authentication to upload files
 from huggingface_hub import HfApi
+
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="../.env")
+
 import os
+
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
-
 
 # Define constants for the dataset and output paths
 api = HfApi(token=HF_TOKEN)

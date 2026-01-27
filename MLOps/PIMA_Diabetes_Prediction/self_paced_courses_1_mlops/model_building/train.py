@@ -15,6 +15,8 @@ from huggingface_hub import HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError
 
 import os
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="../.env")
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
 

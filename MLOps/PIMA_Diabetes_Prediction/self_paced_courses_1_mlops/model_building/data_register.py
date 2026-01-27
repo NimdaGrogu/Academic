@@ -1,13 +1,14 @@
 from huggingface_hub.utils import RepositoryNotFoundError
 from huggingface_hub import HfApi, create_repo
 import os
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="../.env")
 
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"                         # enter the Hugging Face username here
-
 repo_type = "dataset"
 
 # Initialize API client
