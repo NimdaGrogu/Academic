@@ -38,10 +38,12 @@ jobs:
   data-prep:
     needs: register-dataset
     runs-on: ubuntu-latest
+    env:
+      BASE_PATH: MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops
     steps:
       - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r ${{env.BASE_PATH}}/requirements.txt
       - name: 2. Run Data Preparation
-        env:
-          BASE_PATH: MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops
         run: python ${{ env.BASE_PATH }}/model_building/prep.py
 
