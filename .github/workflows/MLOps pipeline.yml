@@ -77,4 +77,5 @@ jobs:
       - name: Install Dependencies
         run: pip install -r ${{env.BASE_PATH}}/requirements.txt
       - name: 4. Push files to Frontend Hugging Face Space for Deployment
-        run: python ${{env.BASE_PATH}}/hosting/hosting.py
+        working-directory: ${{ env.BASE_PATH }}
+        run: python /hosting/hosting.py
