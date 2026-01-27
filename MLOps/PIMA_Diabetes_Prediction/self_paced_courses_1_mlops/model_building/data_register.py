@@ -31,8 +31,7 @@ try:
     api.upload_folder(
         folder_path="data",
         repo_id=repo_id,
-        repo_type=repo_type,
-        commit_message="Uploading Data.."
+        repo_type=repo_type
     )
 except RepositoryNotFoundError:
     print(f"Space '{repo_id}' not found. Creating new space...")

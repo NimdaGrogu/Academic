@@ -12,6 +12,7 @@ logger = logging.getLogger("hosting")
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
 logger.info("Deploying System ..")
+
 api = HfApi(token=HF_TOKEN)
 api.upload_folder(
     folder_path="deployment",
