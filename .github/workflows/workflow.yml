@@ -1,4 +1,4 @@
-name: MLOps pipeline
+name: MLOps pipeline Project Diabetes prediction
 on:
   workflow_dispatch:
 jobs:
