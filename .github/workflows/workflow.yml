@@ -21,8 +21,9 @@ jobs:
             python-version: '3.10'
             cache: 'pip' # Speeds up future runs by caching dependencies
 
-        #- name: Install Dependencies
-        #  run: pip install -r ${{ env.BASE_PATH }}/requirements.txt
+        - name: Install Dependencies
+          run: pip install -r ${{ env.BASE_PATH }}/requirements.txt
+
         - name: Debug workspace (show files & paths)
           run: |
             echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
