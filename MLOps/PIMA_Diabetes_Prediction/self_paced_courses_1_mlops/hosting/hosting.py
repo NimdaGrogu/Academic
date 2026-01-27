@@ -1,9 +1,6 @@
 from huggingface_hub import HfApi, create_repo
 from dotenv import load_dotenv
 from huggingface_hub.errors import RepositoryNotFoundError
-from streamlit import space
-
-from MLOps.PIMA_Diabetes_Prediction.Intro_to_MLOps_w_Github_Actions import repo_type
 
 load_dotenv(dotenv_path="../.env")
 import os
