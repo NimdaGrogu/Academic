@@ -20,6 +20,8 @@ logger = logging.getLogger("data_preparation")
 
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
+logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
+logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
 
 # Define constants for the dataset and output paths
 api = HfApi(token=HF_TOKEN)
@@ -38,6 +40,7 @@ Xtrain, Xtest, ytrain, ytest = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
+logger.info("Creating Data for testing and training.")
 Xtrain.to_csv("Xtrain.csv",index=False)
 Xtest.to_csv("Xtest.csv",index=False)
 ytrain.to_csv("ytrain.csv",index=False)
