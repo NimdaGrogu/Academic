@@ -8,7 +8,7 @@ HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 
-repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"                         # enter the Hugging Face username here
+repo_id = f"jangeles/PIMA-Diabetes-Prediction"                         # enter the Hugging Face username here
 repo_type = "dataset"
 
 # Initialize API client
