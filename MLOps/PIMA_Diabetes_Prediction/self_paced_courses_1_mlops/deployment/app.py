@@ -1,14 +1,13 @@
 import streamlit as st
 import pandas as pd
 from huggingface_hub import hf_hub_download
-from MLOps.PIMA_Diabetes_Prediction.self_paced_courses_1_mlops.secrets import HF_USERNAME
-
+import os
 import joblib
 
-hf_username = HF_USERNAME
+HF_USERNAME = os.getenv("HF_USERNAME")
 
 # Download and load the model
-model_path = hf_hub_download(repo_id=f"{hf_username}/PIMA-Diabetes-Prediction", filename="best_pima_diabetes_model_v1.joblib")                                       # enter the Hugging Face username here
+model_path = hf_hub_download(repo_id=f"{HF_USERNAME}/PIMA-Diabetes-Prediction", filename="best_pima_diabetes_model_v1.joblib")                                       # enter the Hugging Face username here
 model = joblib.load(model_path)
 
 # Streamlit UI for Machine Failure Prediction

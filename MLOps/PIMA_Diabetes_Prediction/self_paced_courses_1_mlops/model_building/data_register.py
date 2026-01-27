@@ -1,10 +1,12 @@
 from huggingface_hub.utils import RepositoryNotFoundError
 from huggingface_hub import HfApi, create_repo
-from MLOps.PIMA_Diabetes_Prediction.self_paced_courses_1_mlops.secrets import HF_USERNAME, HF_TOKEN
+import os
 
-hf_username = HF_USERNAME
+HF_USERNAME = os.getenv("HF_USERNAME")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
-repo_id = f"{hf_username}/PIMA-Diabetes-Prediction"                         # enter the Hugging Face username here
+
+repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"                         # enter the Hugging Face username here
 repo_type = "dataset"
 
 # Initialize API client

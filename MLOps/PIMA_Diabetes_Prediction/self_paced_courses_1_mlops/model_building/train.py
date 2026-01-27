@@ -13,17 +13,19 @@ import joblib
 # for hugging face space authentication to upload files
 from huggingface_hub import HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError
-from MLOps.PIMA_Diabetes_Prediction.self_paced_courses_1_mlops.secrets import HF_TOKEN, HF_USERNAME
 
+import os
+HF_USERNAME = os.getenv("HF_USERNAME")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 #api = HfApi()
 api = HfApi(token=HF_TOKEN)
-hf_username = HF_USERNAME
+HF_USERNAME = HF_USERNAME
 
-Xtrain_path = f"hf://datasets/{hf_username}/PIMA-Diabetes-Prediction/Xtrain.csv"                    # enter the Hugging Face username here
-Xtest_path = f"hf://datasets/{hf_username}/PIMA-Diabetes-Prediction/Xtest.csv"                      # enter the Hugging Face username here
-ytrain_path = f"hf://datasets/{hf_username}/PIMA-Diabetes-Prediction/ytrain.csv"                    # enter the Hugging Face username here
-ytest_path = f"hf://datasets/{hf_username}/PIMA-Diabetes-Prediction/ytest.csv"                      # enter the Hugging Face username here
+Xtrain_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/Xtrain.csv"                    # enter the Hugging Face username here
+Xtest_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/Xtest.csv"                      # enter the Hugging Face username here
+ytrain_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/ytrain.csv"                    # enter the Hugging Face username here
+ytest_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/ytest.csv"                      # enter the Hugging Face username here
 
 Xtrain = pd.read_csv(Xtrain_path)
 Xtest = pd.read_csv(Xtest_path)
@@ -88,7 +90,7 @@ print(classification_report(ytest, y_pred_test))
 joblib.dump(best_model, "best_pima_diabetes_model_v1.joblib")
 
 # Upload to Hugging Face
-repo_id = f"{hf_username}/PIMA-Diabetes-Prediction" # enter the Hugging Face username here
+repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction" # enter the Hugging Face username here
 repo_type = "model"
 
 

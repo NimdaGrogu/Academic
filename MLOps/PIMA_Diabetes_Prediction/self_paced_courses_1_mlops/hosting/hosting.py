@@ -1,5 +1,7 @@
 from huggingface_hub import HfApi
-from MLOps.PIMA_Diabetes_Prediction.self_paced_courses_1_mlops.secrets import HF_TOKEN, HF_USERNAME
+import os
+HF_USERNAME = os.getenv("HF_USERNAME")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 api = HfApi(token=HF_TOKEN)
 api.upload_folder(
