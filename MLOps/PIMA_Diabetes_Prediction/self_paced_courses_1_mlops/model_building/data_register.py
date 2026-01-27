@@ -26,6 +26,13 @@ try:
     api = HfApi(token=HF_TOKEN)
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
     logger.info(f"Space '{repo_id}' already exists. Using it.")
+    # Step 2: Upload the data folder
+    logger.info(f"Uploading the data.")
+    api.upload_folder(
+        folder_path="MLOPS/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops/data",
+        repo_id=repo_id,
+        repo_type=repo_type,
+    )
 except RepositoryNotFoundError:
     print(f"Space '{repo_id}' not found. Creating new space...")
     create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
