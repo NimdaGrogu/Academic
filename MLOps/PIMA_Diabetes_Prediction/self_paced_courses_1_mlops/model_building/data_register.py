@@ -16,7 +16,6 @@ api = HfApi(token=HF_TOKEN)
 
 # Step 1: Check if the space exists
 try:
-    print(HF_USERNAME, HF_TOKEN)
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
     print(f"Space '{repo_id}' already exists. Using it.")
 except RepositoryNotFoundError:
