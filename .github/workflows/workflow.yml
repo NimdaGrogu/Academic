@@ -40,8 +40,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: pip install -r MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops/requirements.txt
       - name: 2. Run Data Preparation
         working-directory: ${{ env.BASE_PATH }}
         run: python model_building/prep.py
