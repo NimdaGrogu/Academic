@@ -63,3 +63,16 @@ jobs:
       - name: 3. Model Building
         run: python ${{ env.BASE_PATH }}/model_building/train.py
 
+  deploy-hosting:
+    runs-on: ubuntu-latest
+    env:
+      BASE_PATH: MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops
+      HF_USERNAME: ${{secrets.HF_USERNAME}}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+    needs: [ model-training,data-prep,register-dataset ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r ${{env.BASE_PATH}}/requirements.txt
+      - name: 4. Deploying .. Push files to Frontend Hugging Face Space
+        run: python ${{env.BASE_PATH}}/hosting/hosting.py
