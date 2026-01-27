@@ -7,7 +7,7 @@ jobs:
       env:
         # Setting these globally for the whole job
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        HF_USERNAME: ${{secrets.HF_NAME}}
+        HF_USERNAME: ${{secrets.HF_USERNAME}}
         PYTHONPATH: .
         BASE_PATH: MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops
 
