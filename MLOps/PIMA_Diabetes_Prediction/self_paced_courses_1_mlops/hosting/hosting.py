@@ -1,5 +1,10 @@
-from huggingface_hub import HfApi
+from huggingface_hub import HfApi, create_repo
 from dotenv import load_dotenv
+from huggingface_hub.errors import RepositoryNotFoundError
+from streamlit import space
+
+from MLOps.PIMA_Diabetes_Prediction.Intro_to_MLOps_w_Github_Actions import repo_type
+
 load_dotenv(dotenv_path="../.env")
 import os
 import logging
@@ -10,13 +15,28 @@ logging.basicConfig(
 logger = logging.getLogger("hosting")
 
 HF_USERNAME = os.getenv("HF_USERNAME")
+repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"
 HF_TOKEN = os.getenv("HF_TOKEN")
 logger.info("Deploying System ..")
-
 api = HfApi(token=HF_TOKEN)
-api.upload_folder(
-    folder_path="deployment",
-    repo_id=f"{HF_USERNAME}/PIMA-Diabetes-Prediction",                                         # enter the Hugging Face username here
-    repo_type="space",
-    path_in_repo="",                          # optional: subfolder path inside the repo
-)
+
+try:
+    api.repo_info(repo_id=repo_id, repo_type="space")
+    logger.info(f"Space '{repo_id}' Exist::Deploying")
+    repo_type="space"
+    api.upload_folder(
+        folder_path="deployment",
+        repo_id=repo_id,  # enter the Hugging Face username here
+        repo_type=repo_type,
+        path_in_repo="",  # optional: subfolder path inside the repo
+    )
+except RepositoryNotFoundError:
+    logger.info(f"Space '{repo_id}' not found. Creating new space...")
+    create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
+    logger.info(f"Space '{repo_id}' created.")
+    api.upload_folder(
+        folder_path="deployment",
+        repo_id=repo_id,  # enter the Hugging Face username here
+        repo_type=repo_type,
+        path_in_repo="",  # optional: subfolder path inside the repo
+    )
