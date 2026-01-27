@@ -11,21 +11,22 @@ logging.basicConfig(
 )
 logger = logging.getLogger("hosting")
 
+HF_TOKEN = os.getenv("HF_TOKEN")
+logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
 HF_USERNAME = os.getenv("HF_USERNAME")
 logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
-
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"
 repo_type = "space"
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-logger.info("Deploying System ..")
-api = HfApi(token=HF_TOKEN)
-
 try:
+    logger.info("Deploying System ..")
+    api = HfApi(token=HF_TOKEN)
+    # Step 1: Check if the space exists
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
     logger.info(f"Space '{repo_id}' Exist::Deploying")
     repo_type="space"
+    # Step 2: Upload the files to deploy
+    logger.info(f"Uploading the data.")
     api.upload_folder(
         folder_path="/MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops/deployment",
         repo_id=repo_id,  # enter the Hugging Face username here
