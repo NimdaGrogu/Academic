@@ -11,6 +11,12 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path="../.env")
 
 import os
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+)
+logger = logging.getLogger("data_preparation")
 
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
@@ -19,7 +25,7 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 api = HfApi(token=HF_TOKEN)
 DATASET_PATH = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/pima.csv"   # enter the Hugging Face username here
 df = pd.read_csv(DATASET_PATH)
-print("Dataset loaded successfully.")
+logger.info("Dataset loaded successfully.")
 
 target_col = 'class'
 

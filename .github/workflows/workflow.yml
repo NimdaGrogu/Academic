@@ -42,4 +42,15 @@ jobs:
           #run: python ${{ env.BASE_PATH }}/model_building/data_register.py
           run: python model_building/data_register.py
 
+        - name: 2. Data Preparation
+          working-directory: ${{ env.BASE_PATH }}
+          run: python model_building/prep.py
+
+        - name: 3. Model Training
+          working-directory: ${{ env.BASE_PATH }}
+          run: python model_building/train.py
+
+        - name: 4. Deploy to Hosting
+          working-directory: ${{ env.BASE_PATH }}
+          run: python hosting/hosting.py
 

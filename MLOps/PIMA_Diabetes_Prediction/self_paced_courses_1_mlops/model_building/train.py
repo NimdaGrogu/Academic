@@ -20,6 +20,14 @@ load_dotenv(dotenv_path="../.env")
 HF_USERNAME = os.getenv("HF_USERNAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
+import os
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+)
+logger = logging.getLogger("data_training")
+
 #api = HfApi()
 api = HfApi(token=HF_TOKEN)
 HF_USERNAME = HF_USERNAME
@@ -73,7 +81,7 @@ grid_search.fit(Xtrain, ytrain)
 
 # Best model
 best_model = grid_search.best_estimator_
-print("Best Params:\n", grid_search.best_params_)
+logger.info("Best Params:\n", grid_search.best_params_)
 
 # Predict on training set
 y_pred_train = best_model.predict(Xtrain)
@@ -82,11 +90,11 @@ y_pred_train = best_model.predict(Xtrain)
 y_pred_test = best_model.predict(Xtest)
 
 # Evaluation
-print("\nTraining Classification Report:")
-print(classification_report(ytrain, y_pred_train))
+logger.info("\nTraining Classification Report:")
+logger.info(classification_report(ytrain, y_pred_train))
 
-print("\nTest Classification Report:")
-print(classification_report(ytest, y_pred_test))
+logger.info("\nTest Classification Report:")
+logger.info(classification_report(ytest, y_pred_test))
 
 # Save best model
 joblib.dump(best_model, "best_pima_diabetes_model_v1.joblib")
