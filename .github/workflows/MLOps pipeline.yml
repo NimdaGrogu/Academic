@@ -83,7 +83,7 @@ jobs:
           ls -la
           echo "Listing BASE_PATH:"
           ls -la "$BASE_PATH" || true
-          echo "Listing BASE_PATH/data:"
+          echo "Listing BASE_PATH/deployment:"
           ls -la "$BASE_PATH/deployment" || true
           echo "Listing repo-root deployment:"
           ls -la /deployment || true 

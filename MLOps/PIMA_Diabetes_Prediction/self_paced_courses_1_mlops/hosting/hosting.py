@@ -27,7 +27,7 @@ try:
     logger.info(f"Space '{repo_id}' Exist::Deploying")
     repo_type="space"
     api.upload_folder(
-        folder_path="deployment",
+        folder_path="/MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops/deployment",
         repo_id=repo_id,  # enter the Hugging Face username here
         repo_type=repo_type,
         path_in_repo="",  # optional: subfolder path inside the repo
@@ -37,7 +37,7 @@ except RepositoryNotFoundError:
     create_repo(repo_id=repo_id, repo_type=repo_type, private=False, space_sdk="docker")
     logger.info(f"Space '{repo_id}' created.")
     api.upload_folder(
-        folder_path="deployment",
+        folder_path="MLOps/PIMA_Diabetes_Prediction/self_paced_courses_1_mlops/deployment",
         repo_id=repo_id,  # enter the Hugging Face username here
         repo_type=repo_type,
         path_in_repo="",  # optional: subfolder path inside the repo
