@@ -17,12 +17,21 @@ HF_USERNAME = os.getenv("HF_USERNAME")
 logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"
 
+repo_type = "space"
 
 api = HfApi(token=os.getenv("HF_TOKEN"))
+
+try:
+    # 1 Check if the repo exist
+    api.repo_info(repo_id=repo_id, repo_type=repo_type)
+except RepositoryNotFoundError:
+    logger.info(f"Repository does not exist, Creating one {repo_id}")
+    create_repo(repo_id, repo_type=repo_type)
+
 api.upload_folder(
     folder_path="deployment",
-    repo_id=f"{HF_USERNAME}/PIMA-Diabetes-Prediction",  # enter the Hugging Face username here
-    repo_type = "space",
+    repo_id=repo_id,  # enter the Hugging Face username here
+    repo_type = repo_type,
     path_in_repo = "",  # optional: subfolder path inside the repo
 )
 

@@ -22,7 +22,6 @@ repo_type = "dataset"
 api = HfApi(token=HF_TOKEN)
 
 try:
-
     # Step 1: Check if the space exists
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
     logger.info(f"Space '{repo_id}' already exists. Using it.")
