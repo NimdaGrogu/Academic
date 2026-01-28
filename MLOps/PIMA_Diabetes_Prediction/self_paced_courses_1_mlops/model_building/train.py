@@ -97,7 +97,11 @@ logger.info("\nTest Classification Report:")
 logger.info(classification_report(ytest, y_pred_test))
 
 # Save best model
-joblib.dump(best_model, "best_pima_diabetes_model_v1.joblib")
+try:
+    logger.info(f"Saving the Best Model ")
+    joblib.dump(best_model, "best_pima_diabetes_model_v1.joblib")
+except Exception as e:
+    logger.error(f"Exception Occurred {e}")
 
 # Upload to Hugging Face
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction" # enter the Hugging Face username here
@@ -114,7 +118,7 @@ except RepositoryNotFoundError:
     logger.info(f"Model Space '{repo_id}' created.")
 
 # create_repo("best_machine_failure_model", repo_type="model", private=False)
-logger.info(f"Uploading Model Object to '{repo_id}' created.")
+logger.info(f"Uploading Serialized Model to '{repo_id}'")
 api.upload_file(
     path_or_fileobj="best_pima_diabetes_model_v1.joblib",
     path_in_repo="best_pima_diabetes_model_v1.joblib",
