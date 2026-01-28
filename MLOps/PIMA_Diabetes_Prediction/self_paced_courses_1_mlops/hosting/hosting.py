@@ -16,7 +16,6 @@ logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
 HF_USERNAME = os.getenv("HF_USERNAME")
 logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"
-
 repo_type = "space"
 
 api = HfApi(token=os.getenv("HF_TOKEN"))
@@ -26,7 +25,12 @@ try:
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
 except RepositoryNotFoundError:
     logger.info(f"Repository does not exist, Creating one {repo_id}")
-    create_repo(repo_id, repo_type=repo_type)
+    create_repo(repo_id,
+                repo_type=repo_type,
+                space_sdk="docker",
+                private=False,
+                exist_ok=True
+                )
 
 api.upload_folder(
     folder_path="deployment",
