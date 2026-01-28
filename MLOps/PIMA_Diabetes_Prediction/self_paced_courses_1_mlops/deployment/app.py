@@ -16,9 +16,10 @@ logger = logging.getLogger("app")
 
 HF_USERNAME = os.getenv("HF_USERNAME")
 logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
+repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"
 
 # Download and load the model
-model_path = hf_hub_download(repo_id=f"{HF_USERNAME}/PIMA-Diabetes-Prediction", filename="best_pima_diabetes_model_v1.joblib")                                       # enter the Hugging Face username here
+model_path = hf_hub_download(repo_id=repo_id, filename="best_pima_diabetes_model_v1.joblib")                                       # enter the Hugging Face username here
 model = joblib.load(model_path)
 
 # Streamlit UI for Machine Failure Prediction
