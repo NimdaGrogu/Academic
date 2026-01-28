@@ -101,7 +101,7 @@ try:
     logger.info(f"Saving the Best Model ")
     joblib.dump(best_model, "best_pima_diabetes_model_v1.joblib")
 except Exception as e:
-    logger.error(f"Exception Occurred {e}")
+    logger.error(f"Exception Occurred Saving the Model {e}")
 
 # Upload to Hugging Face
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction" # enter the Hugging Face username here
