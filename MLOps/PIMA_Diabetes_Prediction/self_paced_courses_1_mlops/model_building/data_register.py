@@ -12,18 +12,17 @@ logger = logging.getLogger("data_register")
 # load local .env for local testing
 load_dotenv(dotenv_path="../.env")
 
+HF_TOKEN = os.getenv("HF_TOKEN")
+HF_NAME = os.getenv("HF_USERNAME")
+logger.info("HF_USERNAME present: %s", "yes" if HF_NAME else "no")
+logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
+repo_id = f"{HF_NAME}/PIMA-Diabetes-Prediction"  # enter the Hugging Face username here
+repo_type = "dataset"
 
 try:
-    HF_TOKEN = os.getenv("HF_TOKEN")
-    logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
-
-    HF_NAME = os.getenv("HF_USERNAME")
-    logger.info("HF_USERNAME present: %s", "yes" if HF_NAME else "no")
-    # Step 1: Check if the space exists
-    repo_id = f"{HF_NAME}/PIMA-Diabetes-Prediction"  # enter the Hugging Face username here
-    repo_type = "dataset"
     # Initialize API client
     api = HfApi(token=HF_TOKEN)
+    # Step 1: Check if the space exists
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
     logger.info(f"Space '{repo_id}' already exists. Using it.")
     # Step 2: Upload the data folder
