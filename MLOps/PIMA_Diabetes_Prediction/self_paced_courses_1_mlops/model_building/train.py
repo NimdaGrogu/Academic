@@ -15,12 +15,6 @@ from huggingface_hub import HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError
 
 import os
-from dotenv import load_dotenv
-load_dotenv(dotenv_path="../.env")
-HF_USERNAME = os.getenv("HF_USERNAME")
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-import os
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -28,9 +22,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger("data_training")
 
-#api = HfApi()
+HF_TOKEN = os.getenv("HF_TOKEN")
+logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
+HF_USERNAME = os.getenv("HF_USERNAME")
+logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
+
+
 api = HfApi(token=HF_TOKEN)
-HF_USERNAME = HF_USERNAME
 
 Xtrain_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/Xtrain.csv"                    # enter the Hugging Face username here
 Xtest_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/Xtest.csv"                      # enter the Hugging Face username here
@@ -54,7 +52,6 @@ numeric_features = [
     'pedi',
     'age'
 ]
-
 
 # Preprocessing pipeline
 preprocessor = make_column_transformer(
@@ -81,7 +78,7 @@ grid_search.fit(Xtrain, ytrain)
 
 # Best model
 best_model = grid_search.best_estimator_
-logger.info("Best Params:\n", grid_search.best_params_)
+logger.info(f"Best Params:\n {grid_search.best_params_}")
 
 # Predict on training set
 y_pred_train = best_model.predict(Xtrain)
@@ -97,7 +94,11 @@ logger.info("\nTest Classification Report:")
 logger.info(classification_report(ytest, y_pred_test))
 
 # Save best model
-joblib.dump(best_model, "best_pima_diabetes_model_v1.joblib")
+try:
+    logger.info(f"Saving the Best Model ")
+    joblib.dump(best_model, "best_pima_diabetes_model_v1.joblib")
+except Exception as e:
+    logger.error(f"Exception Occurred Saving the Model {e}")
 
 # Upload to Hugging Face
 repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction" # enter the Hugging Face username here
@@ -107,13 +108,14 @@ repo_type = "model"
 # Step 1: Check if the space exists
 try:
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
-    print(f"Model Space '{repo_id}' already exists. Using it.")
+    logger.info(f"Model Space '{repo_id}' already exists. Using it.")
 except RepositoryNotFoundError:
-    print(f"Model Space '{repo_id}' not found. Creating new space...")
+    logger.info(f"Model Space '{repo_id}' not found. Creating new space...")
     create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
-    print(f"Model Space '{repo_id}' created.")
+    logger.info(f"Model Space '{repo_id}' created.")
 
 # create_repo("best_machine_failure_model", repo_type="model", private=False)
+logger.info(f"Uploading Serialized Model to '{repo_id}'")
 api.upload_file(
     path_or_fileobj="best_pima_diabetes_model_v1.joblib",
     path_in_repo="best_pima_diabetes_model_v1.joblib",

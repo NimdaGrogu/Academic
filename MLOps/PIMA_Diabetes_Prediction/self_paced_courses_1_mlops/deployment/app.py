@@ -1,24 +1,25 @@
 from huggingface_hub import hf_hub_download
-from dotenv import load_dotenv
-load_dotenv(dotenv_path="../.env")
 
 import streamlit as st
 import pandas as pd
 import os
 import joblib
 import logging
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="../.env")
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s %(levelname)s %(name)s: %(message)s"
 )
 logger = logging.getLogger("app")
 
-
 HF_USERNAME = os.getenv("HF_USERNAME")
 logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
+repo_id = f"{HF_USERNAME}/PIMA-Diabetes-Prediction"
 
 # Download and load the model
-model_path = hf_hub_download(repo_id=f"{HF_USERNAME}/PIMA-Diabetes-Prediction", filename="best_pima_diabetes_model_v1.joblib")                                       # enter the Hugging Face username here
+model_path = hf_hub_download(repo_id=repo_id, filename="best_pima_diabetes_model_v1.joblib")                                       # enter the Hugging Face username here
 model = joblib.load(model_path)
 
 # Streamlit UI for Machine Failure Prediction
@@ -56,3 +57,4 @@ if st.button("Predict Diabetes"):
     result = "Diabetic" if prediction == 1 else "Non-Diabetic"
     st.subheader("Prediction Result:")
     st.success(f"The model predicts: **{result}**")
+
