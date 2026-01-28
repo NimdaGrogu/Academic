@@ -5,12 +5,14 @@ import pandas as pd
 import os
 import joblib
 import logging
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="../.env")
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s %(levelname)s %(name)s: %(message)s"
 )
 logger = logging.getLogger("app")
-
 
 HF_USERNAME = os.getenv("HF_USERNAME")
 logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
@@ -54,3 +56,4 @@ if st.button("Predict Diabetes"):
     result = "Diabetic" if prediction == 1 else "Non-Diabetic"
     st.subheader("Prediction Result:")
     st.success(f"The model predicts: **{result}**")
+
