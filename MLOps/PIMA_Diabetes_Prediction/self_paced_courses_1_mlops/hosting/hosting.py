@@ -32,6 +32,7 @@ except RepositoryNotFoundError:
                 exist_ok=True
                 )
 
+logger.info(f"Uploading file for deployment {repo_id}")
 api.upload_folder(
     folder_path="deployment",
     repo_id=repo_id,  # enter the Hugging Face username here
