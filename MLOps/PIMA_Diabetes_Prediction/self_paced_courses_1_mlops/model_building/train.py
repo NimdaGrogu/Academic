@@ -81,7 +81,7 @@ grid_search.fit(Xtrain, ytrain)
 
 # Best model
 best_model = grid_search.best_estimator_
-logger.info("Best Params:\n", grid_search.best_params_)
+logger.info(f"Best Params:\n {grid_search.best_params_}")
 
 # Predict on training set
 y_pred_train = best_model.predict(Xtrain)
@@ -107,13 +107,14 @@ repo_type = "model"
 # Step 1: Check if the space exists
 try:
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
-    print(f"Model Space '{repo_id}' already exists. Using it.")
+    logger.info(f"Model Space '{repo_id}' already exists. Using it.")
 except RepositoryNotFoundError:
-    print(f"Model Space '{repo_id}' not found. Creating new space...")
+    logger.info(f"Model Space '{repo_id}' not found. Creating new space...")
     create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
-    print(f"Model Space '{repo_id}' created.")
+    logger.info(f"Model Space '{repo_id}' created.")
 
 # create_repo("best_machine_failure_model", repo_type="model", private=False)
+logger.info(f"Uploading Model Object to '{repo_id}' created.")
 api.upload_file(
     path_or_fileobj="best_pima_diabetes_model_v1.joblib",
     path_in_repo="best_pima_diabetes_model_v1.joblib",

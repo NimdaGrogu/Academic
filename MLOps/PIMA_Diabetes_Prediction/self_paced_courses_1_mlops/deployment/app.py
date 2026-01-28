@@ -1,6 +1,4 @@
 from huggingface_hub import hf_hub_download
-from dotenv import load_dotenv
-load_dotenv(dotenv_path="../.env")
 
 import streamlit as st
 import pandas as pd
