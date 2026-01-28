@@ -15,12 +15,6 @@ from huggingface_hub import HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError
 
 import os
-from dotenv import load_dotenv
-load_dotenv(dotenv_path="../.env")
-HF_USERNAME = os.getenv("HF_USERNAME")
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-import os
 import logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -28,9 +22,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger("data_training")
 
-#api = HfApi()
+HF_TOKEN = os.getenv("HF_TOKEN")
+logger.info("HF_TOKEN present: %s", "yes" if HF_TOKEN else "no")
+HF_USERNAME = os.getenv("HF_USERNAME")
+logger.info("HF_USERNAME present: %s", "yes" if HF_USERNAME else "no")
+
+
 api = HfApi(token=HF_TOKEN)
-HF_USERNAME = HF_USERNAME
 
 Xtrain_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/Xtrain.csv"                    # enter the Hugging Face username here
 Xtest_path = f"hf://datasets/{HF_USERNAME}/PIMA-Diabetes-Prediction/Xtest.csv"                      # enter the Hugging Face username here
@@ -54,7 +52,6 @@ numeric_features = [
     'pedi',
     'age'
 ]
-
 
 # Preprocessing pipeline
 preprocessor = make_column_transformer(
