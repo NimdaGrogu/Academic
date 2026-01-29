@@ -18,8 +18,8 @@ open_api_key = os.getenv("OPENAI_API_KEY")
 
 # Configuration
 
-st.set_page_config(page_title="AI Recruiter Assistant", page_icon="👔")
-st.title("👔 AI Recruiter Assistant")
+st.set_page_config(page_title="AI Job Hunt Assistant", page_icon="👔")
+st.title("👔 AI Job Hunt Assistant")
 st.markdown("Provide a job description URL and a candidate resume to get a comprehensive analysis.")
 
 

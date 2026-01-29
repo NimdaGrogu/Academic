@@ -53,9 +53,9 @@ def get_rag_chain(resume_text):
     out_dir = 'vector_db'  # name of the vector database
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
-
-    DB_FAISS_PATH = f"{out_dir}/index.faiss"
-    if os.path.exists(DB_FAISS_PATH):
+    db_index_file_name = "index"
+    db_faiss_path = f"{out_dir}/{db_index_file_name}.faiss"
+    if os.path.exists(db_faiss_path):
         logger.info("Existing vector store found. Loading...")
         # Load existing
         vectorstore_local = FAISS.load_local(
