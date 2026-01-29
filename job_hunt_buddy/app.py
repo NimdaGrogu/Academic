@@ -89,7 +89,7 @@ if submit:
             "q5": "Show match details (0-100%)",
             "q6": "Create a cover letter tailored to this job",
             "q7": "Suggest 3 ways to stand out for this specific role",
-            "q8": "Write a 5 minutes speech implementing the STAR Framework for this specific role"
+            "q8": "Pretend your are the candidate and Write a 5 minutes speech implementing the STAR Framework for this specific role"
         }
 
         # 3. Run the Analysis
