@@ -3,11 +3,18 @@ from typing import Optional
 import streamlit as st
 import logging
 
+import logging
+from rich.logging import RichHandler
+
+# Configure basic config with RichHandler
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+    format="%(message)s", # Rich handles the timestamp and level separately
+    datefmt="[%X]",
+    handlers=[RichHandler(rich_tracebacks=True)]
 )
-logger = logging.getLogger("app")
+
+logger = logging.getLogger("ingestion")
 
 # Function 1: Extract Text from Job Description URL
 """
