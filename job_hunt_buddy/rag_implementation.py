@@ -22,10 +22,16 @@ from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 # Logging and OpenAI configuration
 from dotenv import load_dotenv
 import logging
+from rich.logging import RichHandler
+
+# Configure basic config with RichHandler
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+    format="%(message)s", # Rich handles the timestamp and level separately
+    datefmt="[%X]",
+    handlers=[RichHandler(rich_tracebacks=True)]
 )
+
 logger = logging.getLogger("rag")
 
 # load the env variables

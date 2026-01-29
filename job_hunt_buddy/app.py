@@ -4,11 +4,16 @@ from dotenv import load_dotenv
 import streamlit as st
 import os
 import logging
+from rich.logging import RichHandler
 
+# Configure basic config with RichHandler
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+    format="%(message)s", # Rich handles the timestamp and level separately
+    datefmt="[%X]",
+    handlers=[RichHandler(rich_tracebacks=True)]
 )
+
 logger = logging.getLogger("app")
 
 # load the env variables
