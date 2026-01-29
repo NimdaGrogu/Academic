@@ -88,7 +88,8 @@ if submit:
             "q4": "Analyze Candidate Opportunities to improve based on the job description",
             "q5": "Show match details (0-100%)",
             "q6": "Create a cover letter tailored to this job",
-            "q7": "Suggest 3 ways to stand out for this specific role"
+            "q7": "Suggest 3 ways to stand out for this specific role",
+            "q8": "Write a 5 minutes speech implementing the STAR Framework for this specific role"
         }
 
         # 3. Run the Analysis
@@ -96,7 +97,7 @@ if submit:
         st.subheader("📊 Analysis Results")
 
         # Create tabs for a cleaner UI
-        tabs = st.tabs(["Fit Analysis", "Strengths & Weaknesses", "Cover Letter & Tips"])
+        tabs = st.tabs(["Fit Analysis", "Strengths & Weaknesses", "Cover Letter & Tips", "Interview Tools"])
 
         # We combine the Job Description into the query so the AI knows what to compare against
         base_query = f"Based on this Job Description: \n\n {job_description} \n\n Answer this: "
@@ -132,6 +133,11 @@ if submit:
 
             q7_ans = qa_chain.invoke({"query": base_query + questions["q7"]})
             st.write(f"**How to Stand Out:**\n{q7_ans['result']}")
+        with tabs[3]: # Q8
+            st.markdown("### 💬 Implement a STAR Framework speech ")
+            q8_ans = qa_chain.invoke({"query": base_query + questions["q8"]})
+            st.write(f"**STAR Framework**\n{q8_ans['result']}")
+
 
 
 
