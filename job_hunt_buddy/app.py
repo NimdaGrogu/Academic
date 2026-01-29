@@ -1,4 +1,4 @@
-from ingestion import get_jd_text, get_pdf_text
+from ingestion import get_jd_from_url, get_pdf_text
 from rag_implementation import get_rag_chain
 from dotenv import load_dotenv
 import streamlit as st
@@ -38,85 +38,90 @@ with st.sidebar:
 
 # Main Section
 if submit:
+    # Validations
     if not open_api_key:
         st.error("⚠️ OpenAI API Key is missing. Please check your .env file.")
-    elif not jd_url or not uploaded_resume:
-        st.warning("⚠️ Please provide both a URL and a Resume PDF.")
-    else:
+    if not uploaded_resume:  # Null Resume
+        st.warning("⚠️ Please provide Resume PDF ...")
+    elif not jd_url and not jd_text:  # Null job description
+        st.error("⚠️ Please provide Job Description ...")
+    # A. Get Job Description Text
+    elif jd_url:
+        job_description = get_jd_from_url(jd_url)
+    elif jd_text:
+        job_description = jd_text
+
+    resume_text = get_pdf_text(uploaded_resume)
+    if resume_text and job_description:
+        # B. Get Resume Text
         with st.spinner("Digesting Resume and Job Description..."):
+            st.success("✅ Data successfully extracted!")
+            # Debugging (Optional: View what the bot sees)
+            with st.expander("View Extracted Data"):
+                st.subheader("Job Description Snippet")
+                st.write(jd_text[:500] + "...")
+                st.subheader("Resume Snippet")
+                st.write(resume_text[:500] + "...")
 
-            # A. Get Job Description Text
-            jd_text = get_jd_text(jd_url)
+        with st.spinner("Analysing Candidate Resume and Job Description.."):
+            # 1. Build the RAG Chain with the Resume Data
+            qa_chain = get_rag_chain(resume_text)
 
-            # B. Get Resume Text
-            resume_text = get_pdf_text(uploaded_resume)
+            # 2. Define your questions
+            questions = {
+                "q1": "Does the candidate meet the required skills?",
+                "q2": "Is the candidate a good fit for the job position?",
+                "q3": "Analyze Candidate Strengths for the job position",
+                "q4": "Analyze Candidate Opportunities to improve based on the job description",
+                "q5": "Show match details (0-100%)",
+                "q6": "Create a cover letter tailored to this job",
+                "q7": "Suggest 3 ways to stand out for this specific role"
+            }
 
-            if jd_text and resume_text:
-                st.success("✅ Data successfully extracted!")
-                # Debugging (Optional: View what the bot sees)
-                with st.expander("View Extracted Data"):
-                    st.subheader("Job Description Snippet")
-                    st.write(jd_text[:500] + "...")
-                    st.subheader("Resume Snippet")
-                    st.write(resume_text[:500] + "...")
+            # 3. Run the Analysis
+            st.markdown("---")
+            st.subheader("📊 Analysis Results")
 
-                    # --- LOGIC STARTS HERE ---
+            # Create tabs for a cleaner UI
+            tabs = st.tabs(["Fit Analysis", "Strengths & Weaknesses", "Cover Letter & Tips"])
 
-                    # 1. Build the RAG Chain with the Resume Data
-                    qa_chain = get_rag_chain(resume_text)
+            # We combine the Job Description into the query so the AI knows what to compare against
+            base_query = f"Based on this Job Description: \n\n {jd_text} \n\n Answer this: "
 
-                    # 2. Define your questions
-                    questions = {
-                        "q1": "Does the candidate meet the required skills?",
-                        "q2": "Is the candidate a good fit for the job position?",
-                        "q3": "Analyze Candidate Strengths for the job position",
-                        "q4": "Analyze Candidate Opportunities to improve based on the job description",
-                        "q5": "Show match details (0-100%)",
-                        "q6": "Create a cover letter tailored to this job",
-                        "q7": "Suggest 3 ways to stand out for this specific role"
-                    }
+            with tabs[0]:  # Q1, Q2, Q5
+                st.markdown("### 🎯 Fit Assessment")
+                q1_ans = qa_chain.invoke({"query": base_query + questions["q1"]})
+                st.write(f"**Skills Check:** {q1_ans['result']}")
 
-                    # 3. Run the Analysis
-                    st.markdown("---")
-                    st.subheader("📊 Analysis Results")
+                q2_ans = qa_chain.invoke({"query": base_query + questions["q2"]})
+                st.write(f"**Fit Check:** {q2_ans['result']}")
 
-                    # Create tabs for a cleaner UI
-                    tabs = st.tabs(["Fit Analysis", "Strengths & Weaknesses", "Cover Letter & Tips"])
+                q5_ans = qa_chain.invoke({"query": base_query + questions["q5"]})
+                st.write(f"**Match Details:** {q5_ans['result']}")
 
-                    # We combine the Job Description into the query so the AI knows what to compare against
-                    base_query = f"Based on this Job Description: \n\n {jd_text} \n\n Answer this: "
+            with tabs[1]:  # Q3, Q4
+                st.markdown("### 📈 SWOT Analysis")
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.info("Strengths")
+                    q3_ans = qa_chain.invoke({"query": base_query + questions["q3"]})
+                    st.write(q3_ans['result'])
+                with col2:
+                    st.warning("Opportunities")
+                    q4_ans = qa_chain.invoke({"query": base_query + questions["q4"]})
+                    st.write(q4_ans['result'])
 
-                    with tabs[0]:  # Q1, Q2, Q5
-                        st.markdown("### 🎯 Fit Assessment")
-                        q1_ans = qa_chain.invoke({"query": base_query + questions["q1"]})
-                        st.write(f"**Skills Check:** {q1_ans['result']}")
+            with tabs[2]:  # Q6, Q7
+                st.markdown("### 📝 Application Kit")
+                q6_ans = qa_chain.invoke({"query": base_query + questions["q6"]})
+                with st.expander("Draft Cover Letter"):
+                    st.write(q6_ans['result'])
 
-                        q2_ans = qa_chain.invoke({"query": base_query + questions["q2"]})
-                        st.write(f"**Fit Check:** {q2_ans['result']}")
+                q7_ans = qa_chain.invoke({"query": base_query + questions["q7"]})
+                st.write(f"**How to Stand Out:**\n{q7_ans['result']}")
 
-                        q5_ans = qa_chain.invoke({"query": base_query + questions["q5"]})
-                        st.write(f"**Match Details:** {q5_ans['result']}")
 
-                    with tabs[1]:  # Q3, Q4
-                        st.markdown("### 📈 SWOT Analysis")
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            st.info("Strengths")
-                            q3_ans = qa_chain.invoke({"query": base_query + questions["q3"]})
-                            st.write(q3_ans['result'])
-                        with col2:
-                            st.warning("Opportunities")
-                            q4_ans = qa_chain.invoke({"query": base_query + questions["q4"]})
-                            st.write(q4_ans['result'])
 
-                    with tabs[2]:  # Q6, Q7
-                        st.markdown("### 📝 Application Kit")
-                        q6_ans = qa_chain.invoke({"query": base_query + questions["q6"]})
-                        with st.expander("Draft Cover Letter"):
-                            st.write(q6_ans['result'])
-
-                        q7_ans = qa_chain.invoke({"query": base_query + questions["q7"]})
-                        st.write(f"**How to Stand Out:**\n{q7_ans['result']}")
 
 
 

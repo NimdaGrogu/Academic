@@ -15,7 +15,7 @@ Pending wrapper Funtion to validate and sanitize the input
 """
 
 
-def get_jd_text(url) -> Optional[str]:
+def get_jd_from_url(url) -> Optional[str]:
     """
 
     :param url:
