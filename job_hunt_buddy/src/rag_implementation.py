@@ -56,7 +56,7 @@ def get_rag_chain(resume_text):
     ## Check if the Vector Store exist
     # DB Persistence
     # Vector DB folder
-    out_dir = 'vector_db'  # name of the vector database
+    out_dir = '../vector_db'  # name of the vector database
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
     db_index_file_name = "index"

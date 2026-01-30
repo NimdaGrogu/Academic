@@ -17,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger("app")
 
 # load the env variables
-load_dotenv(dotenv_path=".env")
+load_dotenv()
 open_api_key = os.getenv("OPENAI_API_KEY")
 
 
@@ -41,6 +41,10 @@ with st.sidebar:
     uploaded_resume = st.file_uploader("Upload Candidate Resume (PDF)", type=["pdf"])
     # Button to trigger analysis
     submit = st.button("Analyse Candidate Resume")
+    # Markdown for the badge
+    repo_url ="https://github.com/NimdaGrogu/Academic/tree/main/job_hunt_buddy"
+    badge_markdown = f"[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)]({repo_url})"
+    st.markdown(badge_markdown, unsafe_allow_html=True)
 
 # Main Section
 if submit:
