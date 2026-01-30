@@ -143,7 +143,8 @@ if submit:
             with st.expander("Draft Cover Letter"):
                 st.write(q7_ans['result'])
             q8_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q8']}"})
-            st.write(f"**How to Stand Out:**\n{q8_ans['result']}")
+            with st.expander("**How to Stand Out:**"):
+                st.write(f"{q8_ans['result']}")
         with tabs[3]: # Q9
             st.markdown("### 💬 STAR Framework speech ")
             q9_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q9']}"})
