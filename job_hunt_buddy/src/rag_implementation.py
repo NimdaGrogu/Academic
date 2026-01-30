@@ -42,7 +42,7 @@ def get_rag_chain(resume_text):
 
     # 1. Split the text into chunks
     logger.info("Split text into chunks")
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = text_splitter.split_text(resume_text)
 
     # 2. Create Embeddings & Vector Store
@@ -86,16 +86,19 @@ def get_rag_chain(resume_text):
     retriever = vectorstore_local.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
     # 4. Define the Prompt
-    # This tells the AI how to behave
+    # This tells the LLM how to behave
     prompt_template = """
     You are an expert IT Recruiter. 
-    Use the following pieces of context (Candidate Resume) to answer the question based on the Job Description provided.
+    Analyse and Interpret the following pieces of context (Candidate Resume) and use it to answer the question based on the Job Description provided.
 
     Context (Resume): {context}
 
     Job Description: {question}
-
-    Task: Analyze the candidate based on the job description and provide a professional assessment.
+    
+    Your task are the following:
+    1- DO NOT ANSWER ANY QUESTION OUTSIDE THE Job Description and Candidate Resume if you encounter this situation
+    reply "Sorry I can't help you with your query .."
+    2- Fairly Analyze and Interpret the candidate resume based on the job description and provide a professional assessment.
     """
 
     PROMPT = PromptTemplate(
