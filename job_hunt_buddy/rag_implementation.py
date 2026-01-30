@@ -86,7 +86,7 @@ def get_rag_chain(resume_text):
     retriever = vectorstore_local.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
     # 4. Define the Prompt
-    # This tells the AI how to behave
+    # This tells the LLM how to behave
     prompt_template = """
     You are an expert IT Recruiter. 
     Use the following pieces of context (Candidate Resume) to answer the question based on the Job Description provided.
