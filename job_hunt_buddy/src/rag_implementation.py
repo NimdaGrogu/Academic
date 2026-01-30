@@ -42,7 +42,7 @@ def get_rag_chain(resume_text):
 
     # 1. Split the text into chunks
     logger.info("Split text into chunks")
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = text_splitter.split_text(resume_text)
 
     # 2. Create Embeddings & Vector Store

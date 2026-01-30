@@ -1,6 +1,6 @@
 # Libraries
 
-from ingestion import get_jd_from_url, get_pdf_text
+from ingestion import get_jd_from_url, get_pdf_text_pypdf, get_pdf_text_pdfplumber
 from rag_implementation import get_rag_chain
 from dotenv import load_dotenv
 import streamlit as st
@@ -36,7 +36,7 @@ with st.sidebar:
                            max_chars=600,
                            label="Job Description URL ")
     # Input 2: Raw text (Job Description)
-    jd_text = st.text_input("Job Description Raw Text", max_chars=3000)
+    jd_text = st.text_input("Job Description Raw Text")
     # Input 3: Upload the PDF
     uploaded_resume = st.file_uploader("Upload Candidate Resume (PDF)", type=["pdf"])
     # Button to trigger analysis
@@ -88,18 +88,17 @@ if submit:
     job_description = get_jd_from_url(jd_url) if jd_url else jd_text
 
     # B. Get Resume Text
-    resume_text = get_pdf_text(uploaded_resume)
+    with st.spinner("Extracting information from the resume .."):
+        resume_text = get_pdf_text_pdfplumber(uploaded_resume)
+        st.success("✅ Done ..")
 
     if resume_text and job_description:
-        with st.spinner("Digesting Resume and Job Description..."):
-            st.success("✅ Data successfully extracted!")
+        with st.spinner("Processing Resume and Job Description..."):
+            #st.success("✅ Data successfully extracted!")
 
-            # --- Debugging ---
             with st.expander("View Extracted Data"):
                 st.subheader("Job Description Snippet")
-                # FIX: Print the processed variable, not the input variable
                 st.write(job_description[:500] + "...")
-
                 st.subheader("Resume Snippet")
                 st.write(resume_text[:500] + "...")
 
@@ -179,6 +178,8 @@ if submit:
             st.markdown("### 💬 STAR Framework speech ")
             q9_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q9']}"})
             st.write(f"**STAR Framework**\n{q9_ans['result']}")
+
+        st.success("✅ Data successfully Processed!")
 
 
 

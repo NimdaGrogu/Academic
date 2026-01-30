@@ -1,4 +1,4 @@
-from langchain_community.document_loaders import WeatherDataLoader, WebBaseLoader
+from langchain_community.document_loaders import WebBaseLoader
 from typing import Optional
 import streamlit as st
 import logging
@@ -40,7 +40,7 @@ def get_jd_from_url(url) -> Optional[str]:
 
 
 # Function 2: Extract Text from Uploaded PDF
-def get_pdf_text(uploaded_file, verbose=False) -> Optional[str]:
+def get_pdf_text_pypdf(uploaded_file, verbose=False) -> Optional[str]:
     import pypdf
     try:
         # Read the PDF file directly from the stream
@@ -57,9 +57,10 @@ def get_pdf_text(uploaded_file, verbose=False) -> Optional[str]:
         return None
 
 
-def get_pdf_text_table(uploaded_file, verbose=False)-> Optional[str]:
+def get_pdf_text_pdfplumber(uploaded_file, verbose=False)-> Optional[str]:
     import pdfplumber
     try:
+        logger.info(f"Reading PDF. {uploaded_file}")
         with pdfplumber.open(uploaded_file) as pdf:
             text = ""
             for page in pdf.pages:
@@ -71,7 +72,5 @@ def get_pdf_text_table(uploaded_file, verbose=False)-> Optional[str]:
         st.error(f"Error reading PDF: {e}")
         return None
 
-
-print(get_pdf_text_table(uploaded_file="Jonathan_Angeles_Resume_v2.0.pdf"))
 
 
