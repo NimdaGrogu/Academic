@@ -1,3 +1,5 @@
+# Libraries
+
 from ingestion import get_jd_from_url, get_pdf_text
 from rag_implementation import get_rag_chain
 from dotenv import load_dotenv
@@ -6,9 +8,10 @@ import os
 import logging
 from rich.logging import RichHandler
 
-# Configure basic config with RichHandler
+
+# Configure basic Logging config with RichHandler
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.WARNING,
     format="%(message)s", # Rich handles the timestamp and level separately
     datefmt="[%X]",
     handlers=[RichHandler(rich_tracebacks=True)]
@@ -20,15 +23,12 @@ logger = logging.getLogger("app")
 load_dotenv()
 open_api_key = os.getenv("OPENAI_API_KEY")
 
-
-# Configuration
-st.set_page_config(page_title="AI Job Hunt Assistant", page_icon="👔")
+# Streamlit Configuration
+st.set_page_config(page_title="AI Job Hunt Assistant", page_icon="🚀", layout='wide')
+# Main Streamlit
 st.title("👔 AI Job Hunt Assistant")
 st.markdown("**Provide a job description URL and a candidate resume to get a comprehensive analysis.**")
-
-
 # Sidebar for Inputs
-
 with st.sidebar:
     st.header("Input Data")
     # Input 1: Web Page Link (Job Description)
@@ -36,15 +36,36 @@ with st.sidebar:
                            max_chars=600,
                            label="Job Description URL ")
     # Input 2: Raw text (Job Description)
-    jd_text = st.text_input("Job Description Raw Text", max_chars=600)
+    jd_text = st.text_input("Job Description Raw Text", max_chars=3000)
     # Input 3: Upload the PDF
     uploaded_resume = st.file_uploader("Upload Candidate Resume (PDF)", type=["pdf"])
     # Button to trigger analysis
     submit = st.button("Analyse Candidate Resume")
+
+
     # Markdown for the badge
-    repo_url ="https://github.com/NimdaGrogu/Academic/tree/main/job_hunt_buddy"
-    badge_markdown = f"[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)]({repo_url})"
-    st.markdown(badge_markdown, unsafe_allow_html=True)
+    sidebar_footer_style = """
+    <style>
+    /* This targets the specific container in the sidebar */
+    [data-testid="stSidebar"] > div:first-child {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    /* This targets the last element inside the sidebar and pushes it down */
+    [data-testid="stSidebar"] > div:first-child > div:last-child {
+        margin-top: auto;
+    }
+    </style>
+    """
+    # 4. Add your footer content (This must be the LAST thing you write to the sidebar)
+    st.markdown("---")  # Optional horizontal rule
+    st.link_button("Visit GitHub Repo", "https://github.com/NimdaGrogu/Academic/tree/main/job_hunt_buddy")
+    st.caption("© 2026 Grogus")
+
+    # 3. Inject the CSS
+    st.markdown(sidebar_footer_style, unsafe_allow_html=True)
 
 # Main Section
 if submit:
@@ -90,14 +111,14 @@ if submit:
         questions = {
             "q1": "Does the candidate meet the required skills?",
             "q2": "Is the candidate a good fit for the job position?",
-            "q3": "Show match details (0-100%)",
+            "q3": "Evaluate and analyse the candidate resume and job description, and Show match details  between (0-100%)",
             "q4": "Analyze Candidate Strengths for the job position",
             "q5": "Analyze Candidate Opportunities to improve based on the job description",
             "q6": "Analyze Candidate Weaknesses based on the job description",
             "q7": "Create a cover letter tailored to this job, use the resume to fill out information like the name and "
                   "contact information",
             "q8": "Suggest ways to stand out for this specific role",
-            "q9": "Implementing the STAR Framework, put together a speech for the candidate to use based on the resume and the job"
+            "q9": "Implementing the STAR Framework, Pretend you are the candidate and put together a speech based on the resume and the job"
                   "description and requirements"
         }
 
@@ -113,14 +134,18 @@ if submit:
 
         with tabs[0]:  # Q1, Q2, Q3
             st.markdown("### 🎯 Fit Assessment")
+            logger.info("Entering Fit Assessment")
+            logger.info("**Skills Check:** LLM Processing Q1")
             q1_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q1']}"})
             with st.expander("**Skills Check:**"):
                 st.write(f"{q1_ans['result']}")
 
+            logger.info("Fit Check:** LLM Processing Q2")
             q2_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q2']}"})
             with st.expander("**Fit Check:**" ):
                 st.write(f"{q2_ans['result']}")
 
+            logger.info("**Match Details:** LLM Processing Q3")
             q3_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q3']}"})
             with st.expander("**Match Details:** "):
                 st.write(f"{q3_ans['result']}")
@@ -130,6 +155,7 @@ if submit:
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.info("Strengths",icon="💪")
+                ## LOGGING
                 q4_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q4']}"})
                 st.write(q4_ans['result'])
             with col2:

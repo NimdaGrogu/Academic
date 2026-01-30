@@ -8,7 +8,7 @@ from rich.logging import RichHandler
 
 # Configure basic config with RichHandler
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.WARNING,
     format="%(message)s", # Rich handles the timestamp and level separately
     datefmt="[%X]",
     handlers=[RichHandler(rich_tracebacks=True)]
@@ -40,7 +40,7 @@ def get_jd_from_url(url) -> Optional[str]:
 
 
 # Function 2: Extract Text from Uploaded PDF
-def get_pdf_text(uploaded_file) -> Optional[str]:
+def get_pdf_text(uploaded_file, verbose=False) -> Optional[str]:
     import pypdf
     try:
         # Read the PDF file directly from the stream
@@ -49,7 +49,29 @@ def get_pdf_text(uploaded_file) -> Optional[str]:
         text = ""
         for page in pdf_reader.pages:
             text += page.extract_text()
+        if verbose:
+            logger.info(f"Extracted Text\n\n {text}")
         return text
     except Exception as e:
         st.error(f"Error reading PDF: {e}")
         return None
+
+
+def get_pdf_text_table(uploaded_file, verbose=False)-> Optional[str]:
+    import pdfplumber
+    try:
+        with pdfplumber.open(uploaded_file) as pdf:
+            text = ""
+            for page in pdf.pages:
+                text += page.extract_text()
+            if verbose:
+                logger.info(f"Extracted Text\n\n {text}")
+            return text
+    except Exception as e:
+        st.error(f"Error reading PDF: {e}")
+        return None
+
+
+print(get_pdf_text_table(uploaded_file="Jonathan_Angeles_Resume_v2.0.pdf"))
+
+
