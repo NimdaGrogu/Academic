@@ -2,6 +2,7 @@
 
 from ingestion import get_jd_from_url, get_pdf_text_pypdf, get_pdf_text_pdfplumber
 from rag_implementation import get_rag_chain
+from helper import extract_match_score
 from dotenv import load_dotenv
 import streamlit as st
 import os
@@ -32,11 +33,11 @@ st.markdown("**Provide a job description URL and a candidate resume to get a com
 with st.sidebar:
     st.header("Input Data")
     # Input 1: Web Page Link (Job Description)
-    jd_url = st.text_input(placeholder="https://linkedin.com/jobs/...",
-                           max_chars=600,
+    jd_url = st.text_input(placeholder="https://linkedin.com/jobs/view/..",
+                           max_chars=5000,
                            label="Job Description URL ")
     # Input 2: Raw text (Job Description)
-    jd_text = st.text_input("Job Description Raw Text")
+    jd_text = st.text_input("Job Description Raw Text", max_chars=5000)
     # Input 3: Upload the PDF
     uploaded_resume = st.file_uploader("Upload Candidate Resume (PDF)", type=["pdf"])
     # Button to trigger analysis
@@ -84,8 +85,15 @@ if submit:
 
     # --- Processing ---
     # A. Get Job Description Text
-    # Prioritize URL if provided, otherwise use text
-    job_description = get_jd_from_url(jd_url) if jd_url else jd_text
+    # Prioritize URL if provided, otherwise use text and check if the URL is not None, HTTP Errors
+    if jd_url:
+        job_description = get_jd_from_url(jd_url)
+        if job_description is None:
+            st.error("❌ Something went wrong accessing the URL provided, try again or try the raw text instead..")
+            st.stop()
+    else:
+        job_description = jd_text
+
 
     # B. Get Resume Text
     with st.spinner("Extracting information from the resume .."):
@@ -147,6 +155,19 @@ if submit:
             logger.info("**Match Details:** LLM Processing Q3")
             q3_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q3']}"})
             with st.expander("**Match Details:** "):
+                # Parse the number
+                score = extract_match_score(q3_ans['result'])
+                # Display the Progress Bar
+                st.metric(label="Match Score", value=f"{score}%")
+                st.progress(score / 100)
+                if score < 50:
+                    st.error("Low Match - Missing critical skills.")
+                elif score < 80:
+                    st.warning("Good Match - Some gaps identified.")
+                else:
+                    st.success("High Match - Strong candidate!")
+                # -------------------------------
+                st.divider()
                 st.write(f"{q3_ans['result']}")
 
         with tabs[1]:  # Q4, Q5 , Q6
