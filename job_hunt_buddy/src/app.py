@@ -104,7 +104,7 @@ if submit:
 
     with st.spinner("Analysing Candidate Resume and Job Description.."):
         # 1. Build the RAG Chain with the Resume Data
-        qa_chain = get_rag_chain(resume_text)
+        qa_chain = get_rag_chain(resume_text, uploaded_resume.name)
 
         # 2. Define your questions
         questions = {
