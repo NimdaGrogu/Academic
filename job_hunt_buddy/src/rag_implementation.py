@@ -26,7 +26,7 @@ from rich.logging import RichHandler
 
 # Configure basic config with RichHandler
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.WARNING,
     format="%(message)s", # Rich handles the timestamp and level separately
     datefmt="[%X]",
     handlers=[RichHandler(rich_tracebacks=True)]
@@ -37,8 +37,12 @@ logger = logging.getLogger("rag")
 # load the env variables
 load_dotenv(dotenv_path=".env")
 
+def clean_filename(name: str):
+    import re
+    name = name.replace(".pdf", "")
+    return re.sub(r"[^a-zA-Z0-9_-]", "_", name)
 
-def get_rag_chain(resume_text):
+def get_rag_chain(resume_text, resume_file_name):
 
     # 1. Split the text into chunks
     logger.info("Split text into chunks")
@@ -59,7 +63,7 @@ def get_rag_chain(resume_text):
     out_dir = 'vector_db'  # name of the vector database
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
-    db_index_file_name = "index"
+    db_index_file_name = f"index_{clean_filename(resume_file_name)}"
     db_faiss_path = f"{out_dir}/{db_index_file_name}.faiss"
     if os.path.exists(db_faiss_path):
         logger.info("Existing vector store found. Loading...")
@@ -67,18 +71,20 @@ def get_rag_chain(resume_text):
         vectorstore_local = FAISS.load_local(
             folder_path=out_dir,
             embeddings=embeddings,
-            allow_dangerous_deserialization=True
+            allow_dangerous_deserialization=True,
+            index_name=f"{db_index_file_name}"
         )
     else:
         print("No vector store found. Creating new embeddings...")
         vector_store = FAISS.from_texts(chunks, embedding=embeddings)
-        vector_store.save_local(folder_path=out_dir, index_name="index")
+        vector_store.save_local(folder_path=out_dir, index_name=f"{db_index_file_name}")
         logger.info("Vector store saved successfully.")
         logger.info("Loading New Vector Store ..")
         vectorstore_local = FAISS.load_local(
             folder_path=out_dir,
             embeddings=embeddings,
-            allow_dangerous_deserialization=True
+            allow_dangerous_deserialization=True,
+            index_name=f"{db_index_file_name}"
         )
 
     # 3. Setup the Retriever

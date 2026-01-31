@@ -40,7 +40,7 @@ def get_jd_from_url(url) -> Optional[str]:
 
 
 # Function 2: Extract Text from Uploaded PDF
-def get_pdf_text_pypdf(uploaded_file, verbose=False) -> Optional[str]:
+def get_pdf_text_pypdf(uploaded_file, verbose=False) -> Optional[tuple]:
     import pypdf
     try:
         # Read the PDF file directly from the stream
@@ -57,7 +57,7 @@ def get_pdf_text_pypdf(uploaded_file, verbose=False) -> Optional[str]:
         return None
 
 
-def get_pdf_text_pdfplumber(uploaded_file, verbose=False)-> Optional[str]:
+def get_pdf_text_pdfplumber(uploaded_file, verbose=False)-> Optional[tuple]:
     import pdfplumber
     try:
         logger.info(f"Reading PDF. {uploaded_file}")
