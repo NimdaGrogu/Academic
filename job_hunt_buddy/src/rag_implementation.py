@@ -1,5 +1,3 @@
-# 1. Text Splitting
-# (Remains largely the same, but often imported from langchain_text_splitters in newer docs)
 import os
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -46,7 +44,7 @@ def get_rag_chain(resume_text, resume_file_name):
 
     # 1. Split the text into chunks
     logger.info("Split text into chunks")
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150)
     chunks = text_splitter.split_text(resume_text)
 
     # 2. Create Embeddings & Vector Store
@@ -93,19 +91,22 @@ def get_rag_chain(resume_text, resume_file_name):
 
     # 4. Define the Prompt
     # This tells the LLM how to behave
+    # 4. Define the Prompt (Tuned)
     prompt_template = """
-    You are an expert IT Recruiter. 
-    Analyse and Interpret the following pieces of context (Candidate Resume) and use it to answer the question based on the Job Description provided.
+        You are a Senior Technical Recruiter with 20 years of experience. 
+        You are strict, analytical, and detail-oriented.
 
-    Context (Resume): {context}
+        Your goal is to analyze the Candidate's Resume against the Job Description.
 
-    Job Description: {question}
-    
-    Your task are the following:
-    1- DO NOT ANSWER ANY QUESTION OUTSIDE THE Job Description and Candidate Resume if you encounter this situation
-    reply "Sorry I can't help you with your query .."
-    2- Fairly Analyze and Interpret the candidate resume based on the job description and provide a professional assessment.
-    """
+        Context (Resume segments): {context}
+
+        User Query: {question}
+
+        Your task are the following:
+        1-Answer the query using ONLY the information provided in the context. 
+        If the information is not in the resume, explicitly state "Not mentioned in resume" rather than guessing.
+        2- Fairly Analyze and Interpret the candidate resume based on the job description and provide a professional assessment.
+        """
 
     PROMPT = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]

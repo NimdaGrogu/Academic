@@ -1,6 +1,7 @@
 # Libraries
 
 from ingestion import get_jd_from_url, get_pdf_text_pypdf, get_pdf_text_pdfplumber
+from recruiter_helper import questions_v2
 from rag_implementation import get_rag_chain
 from helper import extract_match_score
 from dotenv import load_dotenv
@@ -115,19 +116,7 @@ if submit:
         qa_chain = get_rag_chain(resume_text, uploaded_resume.name)
 
         # 2. Define your questions
-        questions = {
-            "q1": "Does the candidate meet the required skills?",
-            "q2": "Is the candidate a good fit for the job position?",
-            "q3": "Evaluate and analyse the candidate resume and job description, and Show match details  between (0-100%)",
-            "q4": "Analyze Candidate Strengths for the job position",
-            "q5": "Analyze Candidate Opportunities to improve based on the job description",
-            "q6": "Analyze Candidate Weaknesses based on the job description",
-            "q7": "Create a cover letter tailored to this job, use the resume to fill out information like the name and "
-                  "contact information",
-            "q8": "Suggest ways to stand out for this specific role",
-            "q9": "Implementing the STAR Framework, Pretend you are the candidate and put together a speech based on the resume and the job"
-                  "description and requirements"
-        }
+        questions = questions_v2
 
         # 3. Run the Analysis
         st.markdown("---")
@@ -142,16 +131,6 @@ if submit:
         with tabs[0]:  # Q1, Q2, Q3
             st.markdown("### 🎯 Fit Assessment")
             logger.info("Entering Fit Assessment")
-            logger.info("**Skills Check:** LLM Processing Q1")
-            q1_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q1']}"})
-            with st.expander("**Skills Check:**"):
-                st.write(f"{q1_ans['result']}")
-
-            logger.info("Fit Check:** LLM Processing Q2")
-            q2_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q2']}"})
-            with st.expander("**Fit Check:**" ):
-                st.write(f"{q2_ans['result']}")
-
             logger.info("**Match Details:** LLM Processing Q3")
             q3_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q3']}"})
             with st.expander("**Match Details:** "):
@@ -168,7 +147,17 @@ if submit:
                     st.success("High Match - Strong candidate!")
                 # -------------------------------
                 st.divider()
-                st.write(f"{q3_ans['result']}")
+            logger.info("**Skills Check:** LLM Processing Q1")
+            q1_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q1']}"})
+            with st.expander("**Skills Check:**"):
+                st.write(f"{q1_ans['result']}")
+
+            logger.info("Fit Check:** LLM Processing Q2")
+            q2_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q2']}"})
+            with st.expander("**Fit Check:**" ):
+                st.write(f"{q2_ans['result']}")
+
+
 
         with tabs[1]:  # Q4, Q5 , Q6
             st.markdown("### 📈 SWOT Analysis")
@@ -196,9 +185,10 @@ if submit:
             with st.expander("**How to Stand Out:**"):
                 st.write(f"{q8_ans['result']}")
         with tabs[3]: # Q9
-            st.markdown("### 💬 STAR Framework speech ")
+            st.subheader("🎤 Interview Elevator Pitch")
+            logger.info(f"[*] Entering STAR Framework")
             q9_ans = qa_chain.invoke({"query": f"{base_query}\n\n{questions['q9']}"})
-            st.write(f"**STAR Framework**\n{q9_ans['result']}")
+            st.info(f"{q9_ans['result']}")
 
         st.success("✅ Data successfully Processed!")
 
